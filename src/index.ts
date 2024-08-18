@@ -107,7 +107,10 @@ const handleErrorsStatus = async (axiosRequest: Promise<AxiosResponse>) => {
 }
 export const runpodServerlessBaseUrlProd = "https://api.runpod.ai/v2"
 export const runpodServerlessBaseUrlDev = "https://dev-api.runpod.ai/v2"
-const getEndpointUrl = curry((baseUrl, endpointId: string) => `${baseUrl}/${endpointId}`)
+const getEndpointUrl = curry((baseUrl, endpointId: string) =>
+  // Allow for empty endpointId for local testing.
+  endpointId ? `${baseUrl}/${endpointId}` : baseUrl
+)
 const isCompleted = (status: string) =>
   ["COMPLETED", "FAILED", "CANCELLED", "TIMED_OUT"].includes(status)
 
@@ -313,8 +316,8 @@ class RunpodSdk {
     this.apiKey = apiKey
     this.baseUrl = options.baseUrl ?? this.baseUrl
   }
-  endpoint(endpointId: string) {
-    if (isNil(endpointId)) {
+  endpoint(endpointId: string, allowEmptyId: boolean = false) {
+    if (!allowEmptyId && isNil(endpointId)) {
       print("Endpoint id not supplied")
       return null
     }
