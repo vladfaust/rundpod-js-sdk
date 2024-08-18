@@ -4,7 +4,6 @@
   "description": "JavaScript SDK for Runpod",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "type": "module",
   "author": "Runpod",
   "dependencies": {
     "@actions/core": "^1.10.0",
@@ -20,6 +19,16 @@
     "typescript": "^5.2.2"
   },
   "scripts": {
+    "prepare": "npm run build",
     "build": "tsc"
+  },
+  "files": [
+    "./dist/src/index"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/src/index.js",
+      "types": "./dist/src/index.d.ts"
+    }
   }
 }
